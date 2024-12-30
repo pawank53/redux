@@ -6,12 +6,14 @@ import OnlineUserReducer from "../slice/OnlineUserSlice";
 import createSagaMiddleware from "redux-saga";
 import rootSaga from "../saga/RootSaga";
 import SagaReducer from "../saga/UserSliceSaga";
+import { UserApi } from "../slice/RTKUserSlice";
 
 // Combining all reducers into one root reducer
 const rootReducer = combineReducers({
     users: UserReducer, // Mapping the users state to UserReducer
     onlineUsers: OnlineUserReducer,
-    sagaUsers: SagaReducer
+    sagaUsers: SagaReducer,
+    [UserApi.reducerPath]: UserApi.reducer, // Mapping the RTK User API reducer to the root reducer
 });
 
 // Configuration for persisting the store in AsyncStorage
@@ -29,10 +31,17 @@ const persistedReducer = persistReducer(persisteConfig, rootReducer);
 // Configuring the Redux store with the persisted reducer
 const store = configureStore({
     reducer: persistedReducer, // Setting the persisted reducer as the root reducer
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware({
-            serializableCheck: false, thunk: true // Disabling the serializable check for middleware and make sure thunk is true for async actions like create asynk thunk
-        }).concat(sagaMiddleware), // Adding the Saga middleware
+    // Commenting below for RTK Query
+    // middleware: (getDefaultMiddleware) =>
+    //     getDefaultMiddleware({
+    //         serializableCheck: false, thunk: true // Disabling the serializable check for middleware and make sure thunk is true for async actions like create asynk thunk
+    //     }).concat(sagaMiddleware), // Adding the Saga middleware
+
+    // Adding RTK Query middleware
+        middleware: (getDefaultMiddleware) =>
+            getDefaultMiddleware({
+                serializableCheck: false, thunk: true // Disabling the serializable check for middleware and make sure thunk is true for async actions like create asynk thunk
+            }).concat(sagaMiddleware, UserApi.middleware),
 });
 
 // Running the root saga

@@ -5,20 +5,14 @@ import { FlatList } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { Avatar, Button, Card } from 'react-native-paper';
 import { removeUser } from '../redux/slice/UserSlice';
-import { fetchUsers } from './UserSliceSaga';
+import { UserApi, useGetUsersQuery } from '../redux/slice/RTKUserSlice';
 
+export default function RTKUsers() {
 
+    const {loading, error, data} = useGetUsersQuery();
+    console.log("RTK data:", data);
 
-export default function SagaUsers() {
-    const dispatch=useDispatch();
-    const sagaUsers = useSelector((state) => state.sagaUsers.sagaUser);
-    // const navigation=useNavigation();
-    console.log("saga users:", sagaUsers);
-
-    useEffect(()=>{
-        dispatch(fetchUsers()) // call fetch user saga slice for fetching the user data
-    }, [])
-    const renderItem =useCallback(({item})=> <UserItem item={item}/>, [])
+    const renderItem =useCallback(({item})=> <UserItem item={item} />, [])
 
     const UserItem=React.memo(({item})=>{
         console.log("Rendering user item:", item);
@@ -28,8 +22,9 @@ export default function SagaUsers() {
                 <Card.Content>
                     <Text style={styles.txt}>Name: {item.name}</Text>
                     <Text style={styles.txt}>Email: {item.email}</Text>
-                    <Text style={styles.txt}>Mobile no: {item.phone}</Text>
+                    {/* <Text style={styles.txt}>Mobile no: {item.mobile}</Text> */}
                 </Card.Content>
+               
                </Card>
             </View>
         )
@@ -37,13 +32,14 @@ export default function SagaUsers() {
 
     return (
         <View style={styles.container}>
-            {sagaUsers.length > 0 ?
+            {data.length > 0 ?
                 <FlatList
-                    data={sagaUsers}
+                    data={data}
                     renderItem={renderItem}
                 /> : 
                 <Text >No data found</Text>
             }
+            
         </View>
     )
 }

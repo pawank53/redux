@@ -8,6 +8,7 @@ import UpdateUser from '../screens/UpdateUser';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import OnlineUsers from '../screens/OnlineUsers';
 import SagaUsers from '../redux/saga/SagaUsers';
+import RTKUsers from '../screens/RTKUsers';
 
 
 
@@ -27,6 +28,10 @@ const Tabs=()=>{
             }}/>
             <Tab.Screen name='SagaUser' component={SagaUsers} options={{
                 title:"Saga Users",
+                tabBarIcon:()=> <Image source={require('../assets/images/profile.png')} style={styles.profile}/>
+            }}/>
+            <Tab.Screen name='RTKUser' component={RTKUsers} options={{
+                title:"RTK Users",
                 tabBarIcon:()=> <Image source={require('../assets/images/profile.png')} style={styles.profile}/>
             }}/>
         </Tab.Navigator>
