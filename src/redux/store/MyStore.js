@@ -3,10 +3,12 @@ import UserReducer from "../slice/UserSlice"; // Importing user reducer from the
 import AsyncStorage from "@react-native-async-storage/async-storage"; // For persisting data in AsyncStorage
 import { persistReducer, persistStore } from "redux-persist"; // To create a persisted reducer and store
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry"; // Unused import; you can remove this if not needed
+import OnlineUserReducer from "../slice/OnlineUserSlice";
 
 // Combining all reducers into one root reducer
 const rootReducer = combineReducers({
-    users: UserReducer // Mapping the users state to UserReducer
+    users: UserReducer, // Mapping the users state to UserReducer
+    onlineUsers: OnlineUserReducer
 });
 
 // Configuration for persisting the store in AsyncStorage
